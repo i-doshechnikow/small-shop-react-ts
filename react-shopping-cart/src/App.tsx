@@ -3,9 +3,11 @@ import { useQuery } from "react-query";
 
 import { Drawer, Grid, LinearProgress, Badge } from "@material-ui/core";
 import { AddShoppingCart } from "@material-ui/icons";
+import Cart from "./cart/Cart";
 
 import { StyledButton, Wrapper } from "./App.styles";
 import Item from "./item/item";
+import CartItem from "./CartItem/CartItem";
 
 export type CartItemType = {
   id: number;
@@ -41,7 +43,11 @@ const App = () => {
   return (
     <Wrapper className="App">
       <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
-        Cart goes here
+        <Cart
+          cartItems={cartItems}
+          addToCart={handleAddToCart}
+          removeFromCart={handleRemoveFromCart}
+        />
       </Drawer>
       <StyledButton
         onClick={() => {
