@@ -34,9 +34,39 @@ const App = () => {
   const getTotalitems = (items: CartItemType[]) =>
     items.reduce((accumulator: number, item) => accumulator + item.amount, 0);
 
-  const handleAddToCart = (clickedItem: CartItemType) => null;
+  const handleAddToCart = (clickedItem: CartItemType) => {
+    setCartItems((prev) => {
+      const isItemInCart = prev.find((item) => item.id === clickedItem.id);
 
-  const handleRemoveFromCart = () => null;
+      if (isItemInCart) {
+        return prev.map((item) =>
+          item.id === clickedItem.id
+            ? { ...item, amount: item.amount + 1 }
+            : item
+        );
+      }
+
+      return [...prev, { ...clickedItem, amount: 1 }];
+    });
+  };
+
+  const handleRemoveFromCart = (clickedItemId: number) => {
+    setCartItems((prev) => {
+      const isLastInCart = prev.some(
+        (item) => item.id === clickedItemId && item.amount === 1
+      );
+
+      if (isLastInCart) {
+        return prev.filter((item) => item.id !== clickedItemId);
+      }
+
+      return prev.map((item) => {
+        return item.id === clickedItemId
+          ? { ...item, amount: item.amount - 1 }
+          : item;
+      });
+    });
+  };
 
   if (isLoading) return <LinearProgress />;
   if (error) return <div>Something went wrong...</div>;
